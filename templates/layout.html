@@ -12,17 +12,23 @@
   <link href="{{ url_for('static' , filename = 'css/style.css')}}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-  <nav class="light-blue lighten-1" role="navigation">
+  <nav class="#f06292 pink lighten-2" role="navigation">
     <ul class="left hide-on-med-and-down">
       <li><a href="/">Home</a></li>
       <li><a href="/about">About</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/login">Login</a></li>
+        {% if session.logged_in %}
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Logout</a></li>
+
+        {% else %}
         <li><a href="/register">Register</a></li>
-        <li><a href="/logout">Logout</a></li>
-        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/login">Login</a></li>
+
+        {% endif %}
+
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
@@ -32,6 +38,8 @@
     </div>
   </nav>
 <div class = "container">
+  {% include 'includes/_messages.html'%}
+
   {% block body  %}{% endblock  %}
 </div>
 
