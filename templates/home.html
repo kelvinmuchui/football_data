@@ -1,31 +1,35 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="section no-pad-bot" id="index-banner">
-  {% if session.logged_in %}
-    {% for team in teams%}
-  <div class="row">
-    <div class="col sl12 m6">
-      <div class="card blue-grey darken-1">
-        <div class="card-content white-text">
-          <span class = "card-title">{{team.name}}</span>
-          <p>
-            {{team.history}}
-          </p>
+{% if session.logged_in %}
+  {% for team in teams%}
+<div class="container">
+<div class="section">
+<div class="row">
+  <div class="col sl12 m4">
+    <div class="card blue-grey darken-1">
+      <div class="card-content white-text">
+        <span class = "card-title">{{team.name}}</span>
+        <p>
+          {{team.history}}
+        </p>
 
-        </div>
-        <div class="card-action">
-          <a href="#">{{team.homeground}}</a>
-          <a href="#">{{team.trophy}}</a>
-
-        </div>
       </div>
+      <div class="card-action">
+        <a href="#">{{team.homeground}}</a>
+        <a href="#">{{team.trophy}}</a>
 
+      </div>
     </div>
 
   </div>
-  {% endfor %}
+
+</div>
+</div>
+</div>
+{% endfor %}
 {% else %}
+<div class="section no-pad-bot" id="index-banner">
 <div class="container">
   <br><br>
   <h1 class="header center orange-text">Data House</h1>

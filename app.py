@@ -63,47 +63,18 @@ def index():
 def about():
     return render_template('about.html')
 
-#..............................................
-#teams route
-#...............................................
-
-@app.route('/teams')
-def teams():
-    #create curser
-    cur = mysql.connection.cursor()
-
-
-    #Get teams
-    result = cur.execute("SELECT * FROM teams")
-    teams = curl.fetchall()
-
-    if result > 0:
-        return render_template('teams.html')
-    else:
-        msg = "No Teams  Found"
-        return render_template('teams.html')
-
-    #close connection
-    cur.close()
-
-#..............................................
-#team route
-#..............................................
-@app.route('/team/<string:id>/')
-def team(id):
-
-
-    #create cursor
-    cur = mysql.connection.cursor()
-
-
-    #get team
-    result = cur.execute("SELECT * FROM teams WHERE id = %s ", [id])
-    team = cur.fetchone()
-
-    return render_template('team.html', team=team)
-
-
+#............................................................................
+# user login required
+#.............................................................................
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', "danger")
+            return redirect(url_for('login'))
+    return wrap
 
 #..............................................
 #registration Form
@@ -197,24 +168,9 @@ def login():
             return render_template('login.html', error = error)
     return render_template('login.html')
 
-#.........................................................
-#Check if user is logged in
-#.........................................................
-
-
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, Please login', "danger")
-            return redirect(url_for('login'))
-    return wrap
-
-    #...........................................
+#...........................................
     #dashboard
-    #.............................................
+#.............................................
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
@@ -234,6 +190,50 @@ def dashboard():
 
     #close connection
     cur.close()
+
+#..............................................
+#teams route
+#...............................................
+
+@app.route('/teams')
+def teams():
+    #create curser
+    cur = mysql.connection.cursor()
+
+
+    #Get teams
+    result = cur.execute("SELECT * FROM teams")
+    teams = curl.fetchall()
+
+    if result > 0:
+        return render_template('teams.html')
+    else:
+        msg = "No Teams  Found"
+        return render_template('teams.html')
+
+    #close connection
+    cur.close()
+
+#..............................................
+#team route
+#..............................................
+@app.route('/team/<string:id>/')
+def team(id):
+
+
+    #create cursor
+    cur = mysql.connection.cursor()
+
+
+    #get team
+    result = cur.execute("SELECT * FROM teams WHERE id = %s ", [id])
+    team = cur.fetchone()
+
+    return render_template('team.html', team=team)
+
+#..........................................................................
+# Team wtforms
+#.........................................................................
 class TeamForm(Form):
     name = StringField('Name', [validators.Length(min =1, max =200)])
     history = TextAreaField('History',[validators.Length(min =4)])
@@ -273,6 +273,50 @@ def add_team():
         return redirect(url_for('dashboard'))
 
     return render_template('add_team.html', form=form)
+
+#..............................................................................
+#player details
+#..............................................................................
+@app.route('/player_details')
+def player_details():
+        #create curser
+        cur = mysql.connection.cursor()
+
+
+        #Get teams
+        result = cur.execute("SELECT * FROM player")
+        teams = cur.fetchall()
+
+        if result > 0:
+            return render_template('player_details.html')
+        else:
+            msg = "No Teams  Found"
+            return render_template('player_details.html')
+
+        #close connection
+        cur.close()
+#.........................................................
+#players routes
+#.........................................................
+@app.route('/players')
+def players():
+        #create cursor
+    cur = mysql.connection.cursor()
+
+
+    #Get articles
+    result = cur.execute("SELECT * FROM player")
+    teams = cur.fetchall()
+
+    if result >0:
+        return render_template('players.html', teams=teams)
+    else:
+        msg = 'No teams Found'
+        return render_template('players.html', msg =msg)
+
+    #close connection
+    cur.close()
+
 #...............................................................................
                 #logout
 #...............................................................................
