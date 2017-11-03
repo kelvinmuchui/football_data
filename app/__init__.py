@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 from flask_login import LoginManager
 
@@ -15,7 +16,7 @@ def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object('config.DevelopmentConfig')
     app.config.from_pyfile('config.py')
-    # db.init_app(app)
+    db.init_app(app)
 
     #setting app test
     # @app.route('/')
@@ -30,6 +31,8 @@ def create_app(config_name):
 
 
     migrate = Migrate(app, db)
+
+    Bootstrap(app)
     from app import models
     #blueprints
     from .admin import admin as admin_blueprint
