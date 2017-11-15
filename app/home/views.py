@@ -4,7 +4,9 @@ from flask_login import current_user ,login_required
 
 from . import home
 from ..models import Team, Player
-
+#............................................................
+#home route
+#............................................................
 @home.route('/')
 def homepage():
     """
@@ -12,36 +14,64 @@ def homepage():
     """
 
     return render_template('home/index.html', title = "Welcome")
-
+#.......................................................................
+#dashboard route
+#...................................................................
 @home.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-        """
-        List all teams
-        """
+        # """
+        # List all teams
+        # """
+        #
+        # teams = Team.query.all()
 
-        teams = Team.query.all()
+        return render_template('home/dashboard.html')
+#.................................................................
+#teams route
+#.................................................................
 
-        return render_template('home/dashboard.html',
-                               teams=teams, title="Teams")
-
-@home.route('/admin/dashboard')
+@home.route('/teams', methods = ['GET', 'POST'])
 @login_required
-def admin_dashboard():
-    """"
-    Rendert the admin dashdoard
-    """
-    if not current_user.is_admin:
-        abort(403)
-    return render_template('home/admin_dashboard.html', title = "Dashboard")
-@home.route('/teams', methods=['GET', 'POST'])
-@login_required
-def list_teams():
+def teams():
     """
     List all teams
     """
 
     teams = Team.query.all()
 
-    return render_template('home/dashdoard.html',
-                           teams=teams, title="Teams")
+    return render_template('home/teams/teams.html',
+                                teams = teams, titles = "Teams")
+#.................................................................
+#admin dashboard
+#..................................................................
+@home.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+    #prevent non_admins from accessing the page
+    if not current_user.is_admin:
+        abort(403)
+    return render_template('home/admin_dashboard.html')
+
+#......................................................................
+#team route
+#.....................................................................
+@home.route('/team/<int:id>', methods = ['GET', 'POST'])
+@login_required
+def team_details(id):
+    """
+    List details of a team
+    """
+    team = Team.query.get_or_404(id)
+
+    return render_template ('home/teams/team.html', team = team)
+
+@home.route('/player/<int:id>', methods = ['GET', 'POST'])
+@login_required
+def player_details(id):
+    """
+    List details of a player
+    """
+    player = Player.query.get_or_404(id)
+
+    return render_template ('home/players/player.html', player = player)

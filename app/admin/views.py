@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from . import admin
 from forms import TeamForm,PlayerForm, PlayerAssignForm
 from .. import db
-from ..models import Team, Player
+from ..models import Team, Player, User
 
 def check_admin():
     """
@@ -84,7 +84,7 @@ def edit_team(id):
     form.history.data = team.history
     form.name.data = team.name
     return render_template('admin/teams/team.html', action="Edit",
-                           add_department=add_team, form=form,
+                           add_team=add_team, form=form,
                            team=team, title="Edit Team")
 
 
@@ -119,18 +119,18 @@ def add_player():
                         first_name=form.first_name.data)
 
         try:
-            # add role to the database
+            # add player to the database
             db.session.add(player)
             db.session.commit()
             flash('You have successfully added a new player.')
         except:
-            # in case role name already exists
+            # in case player name already exists
             flash('Error: role name already exists.')
 
-        # redirect to the roles page
+        # redirect to the players page
         return redirect(url_for('admin.list_players'))
 
-    # load role template
+    # load player template
     return render_template('admin/players/player.html', add_player=add_player,
                            form=form, title='Add player')
 
@@ -155,7 +155,7 @@ def edit_player(id):
         db.session.commit()
         flash('You have successfully edited the player.')
 
-        # redirect to the roles page
+        # redirect to the players page
         return redirect(url_for('admin.list_players'))
 
     form.email.data = player.email
@@ -213,7 +213,18 @@ def list_players():
     players = Player.query.all()
     return render_template('admin/players/players.html',
                            players=players, title='Players')
+@admin.route('/users')
+@login_required
+def users():
+    '''
+    list of all users
+    '''
 
+    check_admin()
+    users = User.query.all()
+
+    return render_template('admin/users/users.html',
+                                users = users, title = 'User')
 @admin.route('/players/assign/<int:id>', methods=['GET', 'POST'])
 @login_required
 def assign_player(id):

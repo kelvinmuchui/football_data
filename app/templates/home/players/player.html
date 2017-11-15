@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>football stats</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="{{ url_for('static', filename='css/materialize.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/materialize.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css.map') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Overlock" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+      <div class="container topnav">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand topnav" href="{{ url_for('home.homepage') }}">Project Dream Team</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+              {% if current_user.is_admin %}
+                <li><a href="{{ url_for('home.admin_dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin.list_teams') }}">Teams</a></li>
+                <li><a href="{{ url_for('admin.list_players') }}">Players</a></li>
+                <li><a href="{{ url_for('admin.users') }}">Users</a></li>
+              {% else %}
+                <li><a href="{{ url_for('home.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('home.teams') }}">Teams</a></li>
+
+              {% endif %}
+              <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+              <li><a><i class="fa fa-user"></i>  Hi, {{ current_user.username }}!</a></li>
+            {% else %}
+              <li><a href="{{ url_for('home.homepage') }}">Home</a></li>
+              <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+              <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+        </div>
+      </div>
+  </nav>
+    <section class="landing row ">
+        <div id="video_overlays">
+            <div class="row results">
+                <div class="col s12 l3 m6 playerbio"> <img src="img/player.jpg" alt="" height="400" width="200"> </div>
+
+                <div class="col s12 l3 m6 playerdata">
+                    <h4>Skills</h4>
+                    <div class="row playerdatalist">
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li>Ball control</li>
+                                <li>Acceleration</li>
+                                <li>Agility</li>
+                                <li>Balance</li>
+                                <li>Jumping</li>
+                                <li>Reaction</li>
+                                <li>Strength</li>
+                                <li>Sprint Speed</li>
+                            </ul>
+                        </div>
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li> 90% </li>
+                                <li>80%</li>
+                                <li>70%</li>
+                                <li>50%</li>
+                                <li>50%</li>
+                                <li> 70%</li>
+                                <li> 90% </li>
+                                <li> 90% </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 l3 m6 playerdata">
+                    <h4>Player Data</h4>
+                    <div class="row playerdatalist">
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li>Name</li>
+                                <li>Age</li>
+                                <li>Height</li>
+                                <li>Weight</li>
+                                <li>Weakfoot</li>
+                                <li>Pref foot</li>
+                            </ul>
+                        </div>
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li>Lionel Messi</li>
+                                <li>39yrs</li>
+                                <li>5"6</li>
+                                <li>70lbs</li>
+                                <li>long</li>
+                                <li>short</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 l3 m6 playerdata">
+                    <h4>Player Record</h4>
+                    <div class="row playerdatalist">
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li>Goals scored</li>
+                                <li>Yellow card</li>
+                                <li>Red Card</li>
+                                <li>Assist</li>
+                            </ul>
+                        </div>
+                        <div class="col s6 l6 m6">
+                            <ul>
+                                <li>40</li>
+                                <li>30</li>
+                                <li>10</li>
+                                <li>100</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="aboutplayer">
+        <div class="row">
+            <div class="col s6 l6 m6 aboutplayertext">
+                <h4>History</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, doloribus, blanditiis? Vitae distinctio nihil perspiciatis quis voluptatum blanditiis repellat aliquid sunt magnam. Eius, officia neque facilis quasi, quia ab esse! Lorem ipsum dolor sit amet, consectetur adipisicing elit. At saepe soluta ex eaque repudiandae quod doloremque, omnis consectetur tenetur, modi officia maxime, nostrum itaque voluptate dolorum praesentium, facere. Dicta, repellat! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, laboriosam! Nesciunt laboriosam aut assumenda reprehenderit accusantium, reiciendis sequi cumque, quas. Ab asperiores atque ipsa ad! Quos porro, delectus cum dolorem.</p>
+            </div>
+            <div class="col s6 l6 m6 aboutplayervideo">
+                <div class="video-container">
+                    <iframe width="853" height="480" src="/img/Keeper.mov" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="page-footer">
+      <div class="">
+        <div class="row">
+          <div class="col l4 m4 s12">
+            <h5 class="white-text">COMPANY LOGO</h5>
+            <p class="grey-text text-lighten-4"> unt in culpa qui officia deserunt mollit anim id est laborum quam possimus!</p>
+          </div>
+          <div class="col l4 m4 s12">
+              <h5 class="white-text">Links</h5>
+              <ul>
+                <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+              </ul>
+          </div>
+          <div class="col l4 m4 s12">
+            <h5 class="white-text">Links</h5>
+            <ul>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="row center">
+          © 2017 Copyright
+        </div>
+      </div>
+    </footer>
+    <script src="js/index.js"></script>
+
+</body>
+
+</html>
