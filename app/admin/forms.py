@@ -1,30 +1,33 @@
 from flask_wtf import FlaskForm
+
 from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from ..models import Team
 
+from ..models import Department, Role
 
-class TeamForm(FlaskForm):
+class DepartmentForm(FlaskForm):
     """
-    Form for admin to add or edit a teams
+    Form for admin to add or edit a department
+    """
+
+    name = StringField('Name', validators = [DataRequired()])
+    description = StringField('Description', validators = [DataRequired()])
+    submit = SubmitField('Submit')
+class RoleForm(FlaskForm):
+    """
+    Form for admin to add or edit a role
     """
     name = StringField('Name', validators=[DataRequired()])
-    history = StringField('History', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
-class PlayerForm(FlaskForm):
+
+class EmployeeAssignForm(FlaskForm):
     """
-    Form for admin to add or edit a player
+    Form for admin to assign departments and roles to employees
     """
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    username = StringField('Username', validators=[DataRequired()])
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-class PlayerAssignForm(FlaskForm):
-    """
-    From for addmin to assign a team to PlayerAssignForm
-    """
-    team = QuerySelectField(query_factory = lambda : Team.query.all(),
-                                get_label = "name")
+    department = QuerySelectField(query_factory=lambda: Department.query.all(),
+                                  get_label="name")
+    role = QuerySelectField(query_factory=lambda: Role.query.all(),
+                            get_label="name")
     submit = SubmitField('Submit')

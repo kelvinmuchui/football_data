@@ -5,14 +5,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login_manager
 
 
-class User(UserMixin, db.Model):
+class Employee(UserMixin, db.Model):
     """
-    Create an User table
+    Create an Employee table
     """
 
     #ENsure table will be name in plural an not in singular
     # as is the name ot the Model
-    __tablename__ = 'users'
+    __tablename__ = 'employees'
 
 
     id = db.Column(db.Integer, primary_key =True)
@@ -21,6 +21,10 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(60), index = True)
     last_name = db.Column(db.String(60), index = True)
     password_hash = db.Column(db.String(128))
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    # records_id = db.Column(db.Integer, db.ForeignKey('records.id'))
+
     is_admin = db.Column(db.Boolean, default =False)
 
 
@@ -47,47 +51,61 @@ class User(UserMixin, db.Model):
 
         return check_password_hash(self.password_hash, password)
     def __repr__(self):
-        return '<User: {}>'.format(self.username)
+        return '<Employee: {}>'.format(self.username)
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return Employee.query.get(int(user_id))
 
-
-
-class Player( db.Model):
+class Department(db.Model):
     """
-    Create an Player table
+    Create a Department table
     """
 
-    #ENsure table will be name in plural an not in singular
-    # as is the name ot the Model
-    __tablename__ = 'players'
-
-
-    id = db.Column(db.Integer, primary_key =True)
-    email = db.Column(db.String(60), index = True, unique = True)
-    username = db.Column(db.String(60), index = True, unique = True)
-    first_name = db.Column(db.String(60), index = True)
-    last_name = db.Column(db.String(60), index = True)
-    team_id = db.Column(db.Integer, db.ForeignKey('teams.id'))
-
-    def __repr__(self):
-        return '<Player: {}>'.format(self.username)
-
-
-
-class Team(db.Model):
-    """
-    Create a teams table
-    """
-
-    __tablename__ = 'teams'
+    __tablename__ = 'departments'
 
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(60), unique = True)
-    history = db.Column(db.String(200))
-    players = db.relationship('Player', backref ='team', lazy ='dynamic')
+    description = db.Column(db.String(200))
+    employees = db.relationship('Employee', backref ='department', lazy ='dynamic')
 
 
     def __repr__(self):
-        return '<Team: {}>'.format(self.name)
+        return '<Department: {}>'.format(self.name)
+
+class Role(db.Model):
+    """
+    Create a Role table
+    """
+
+    __tablename__ = 'roles'
+
+
+    id =db.Column(db.Integer,primary_key = True)
+    name = db.Column(db.String(60), unique = True)
+    description = db.Column(db.String(200))
+    employees = db.relationship('Employee', backref = 'role', lazy ='dynamic')
+
+
+
+def __repr__(self):
+    return '<Role: {}>'. format(self.name)
+
+
+class Record(db.Model):
+    """
+    Create a Department table
+    """
+
+    __tablename__ = 'records'
+
+    id = db.Column(db.Integer, primary_key = True)
+    worker_name = db.Column(db.String(200))
+    day = db.Column(db.Date)
+    Production =db.Column(db.Integer)
+    openning_count =db.Column(db.Integer)
+    closing_count = db.Column(db.Integer)
+
+
+
+    def __repr__(self):
+        return '<Department: {}>'.format(self.name)

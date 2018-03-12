@@ -4,7 +4,7 @@ from flask_login import login_required, login_user, logout_user
 from . import auth
 from forms import LoginForm, RegistrationForm
 from .. import db
-from ..models import User
+from ..models import Employee
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -14,14 +14,14 @@ def register():
     """
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data,
+        employee = Employee(email=form.email.data,
                             username=form.username.data,
                             first_name=form.first_name.data,
                             last_name=form.last_name.data,
                             password=form.password.data)
 
         # add employee to the database
-        db.session.add(user)
+        db.session.add(employee)
         db.session.commit()
         flash('You have successfully registered! You may now login.')
 
@@ -42,14 +42,14 @@ def login():
 
         # check whether employee exists in the database and whether
         # the password entered matches the password in the database
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.verify_password(
+        employee = Employee.query.filter_by(email=form.email.data).first()
+        if employee is not None and employee.verify_password(
                 form.password.data):
             # log employee in
-            login_user(user)
+            login_user(employee)
 
             #redirect to the approprite dashboard
-            if user.is_admin:
+            if employee.is_admin:
                 return redirect(url_for('home.admin_dashboard'))
             else:
                 # redirect to the dashboard page after login
@@ -67,7 +67,7 @@ def login():
 def logout():
     """
     Handle requests to the /logout route
-    Log an out out through the logout link
+    Log an employee out through the logout link
     """
     logout_user()
     flash('You have successfully been logged out.')
